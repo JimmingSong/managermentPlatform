@@ -1,0 +1,347 @@
+/*初始化*/
+body,ul,ol,li,h1,h2,h3,h4,h5,h6,form,fieldset,table,td,img,div{margin:0;padding:0;border:0;}
+
+body {
+    background: #fff;
+    color: #333;
+    font-size: 16px;
+    margin: 5px 0 0 5px;
+    font-family: "SimSun", "宋体", "Arial Narrow";
+}
+html{height: 100%;}
+
+ul,ol{list-style-type:none;}
+/*li{cursor: pointer}*/
+select,input,img,select{vertical-align:middle;}
+
+a{text-decoration:none;}
+a:link{color:#009;}
+a:visited{color:#800080;}
+a:hover,a:active,a:focus{color:#c00;text-decoration:underline;}
+.cf:before, .cf:after{
+    content:"";
+    display:table;
+}
+.cf:after{
+    clear:both;
+}
+.cf{
+    zoom:1;
+}
+.flex{
+    display: flex;
+}
+body{
+    flex-direction: column;
+}
+.nav {
+    flex: auto;
+}
+.nav-li{
+    float: left;
+    min-width: 160px;
+    margin-right: 5px;
+}
+.main {
+    flex: auto;
+    height: 90%;
+}
+.context {
+    float: left;
+    flex: 6;
+    border: 1px #dddfde solid;
+    margin:0 3px;
+}
+.show-result {
+    border: 1px #dddfde solid;
+    height: 370px;
+    width: 100%;
+    display: block !important;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+.show-result>li{
+    height: 35px;
+    line-height: 35px;
+    background: #eee;
+    margin: 2px 0;
+}
+.select-cue {
+    width: 5rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+    /*flex: 0.5;*/
+    display: block;
+}
+.menu {
+    float: left;
+}
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.container,.model,.webpage,.csslib{
+    position: relative;
+    width: 200px;
+    margin: 0 0.3em 0 0.3em;
+}
+.main-fu {
+    position: relative;
+    width: 300px;
+    margin: 10px 0.3em 0 0.3em;
+}
+.firstMenu{
+    position: relative;
+    margin-top: 0.1rem;
+}
+.secondMenu>a,
+.firstMenu>a,
+.thirdMenu>a{
+    position: relative;
+    text-decoration: none;
+    text-align: center;
+    min-width: 160px;
+    line-height: 30px;
+    color: #343434;
+    display: inline-block;
+    width: 100%;
+}
+.firstMenu>a:hover,
+.firstMenu>a:active{
+    color: white;
+    background: #3284a7;
+}
+.open>a:hover em,
+.firstMenu>a:hover em,
+.firstMenu>a:active em{
+    background-position: -15px -8px !important;
+}
+.open>a em{
+    background-position: -7px -8px !important;
+}
+.firstMenu>a{
+    border: 1px solid lightgray;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+.secondMenu>a{
+    text-align: left;
+    margin-top: 2px;
+    text-indent: 40px;
+    background: #f9f9f9;
+    position: relative;
+}
+.thirdMenu>a{
+    text-align: left;
+    margin-top: 2px;
+    text-indent: 60px;
+    background: #f3f3f3;
+    position: relative;
+}
+.secondMenu>a em{
+    position: absolute;
+    background: url("../images/dbIcon.png") no-repeat;
+    width: 16px;
+    height: 16px;
+    z-index: 10;
+    left: 10px;
+    top: 10px;
+}
+.secondMenu>a:hover{
+    background: #bcddf1;
+}
+.thirdMenu>a:hover{
+    background: #bcccc0;
+}
+.firstMenu>a em{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-style: normal;
+    background-image:url("../images/arrow.png");
+    background-position: -1px -8px;
+    width: 8px;
+    height: 8px;
+}
+.none{
+    display: none;
+}
+.nav-li-ul{
+    position: absolute;
+    left: 0;
+    top:34px;
+}
+/*select*/
+/* Label styles: style as needed */
+.dark-wrapper {
+    margin-top: 2em;
+    padding: 1em 1em 1em;
+    background: #444;
+}
+
+.dark-wrapper label {
+    margin-top: 0;
+    color: #ccc;
+}
+
+
+/* These are the "theme" styles for our button applied via separate button class, style as you like */
+/* Set the background fallback to solid #fff so Firefox renders the <option> list readably. */
+.button,.submit-button {
+    cursor: pointer;
+    height: 2.5rem;
+    text-align: center;
+    border: 1px solid #bbb;
+    border-radius: .3em;
+    background: #f3f3f3; /* Old browsers */
+    background: #fff -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
+    background: #fff -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
+    background: #fff -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Chrome10+,Safari5.1+ */
+    background: #fff -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Opera 11.10+ */
+    background: #fff -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* IE10+ */
+    background: #fff linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); /* W3C */
+}
+.submit-button{
+    line-height: 2.5rem;
+    flex: 1;
+    margin:1rem 0 0 0;
+    width:160px;
+}
+.retu-button {
+    line-height: 2.5rem;
+    padding: 0 3px;
+    flex: 1;
+    margin:1rem 3rem;
+}
+.custom-select select {
+    font-family: sans-serif;
+    font-weight: 700;
+    color: #444;
+    line-height:1.3;
+    border-radius: .2em;
+}
+.custom-select::after {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 7px solid #666;
+    margin-top: -3px;
+}
+.custom-select {
+    border: 1px solid #bbb;
+}
+/* Hover style */
+.custom-select:hover {
+    border-color: #888;
+}
+/* Focus style */
+.custom-select select:focus {
+    /* It'd be nice to use -webkit-focus-ring-color here but it doesn't work on box-shadow */
+    box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+    box-shadow: 0 0 0 3px -moz-mac-focusring;
+    color: #222; /* Match-02 */
+}
+@supports ( box-shadow: none ) {
+    .custom-select select:focus {
+        outline: none;
+    }
+}
+/* Set options to normal weight */
+.custom-select option {
+    font-weight:normal;
+}
+
+/*搜索框*/
+/* Form wrapper styling */
+.form-wrapper:after{
+    content: "";
+    display: block;
+    clear: both;
+}
+.form-wrapper {
+    width: 100%;
+    padding: 5px;
+    background: #dddfde;
+    border-radius: 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+/* Form text input */
+.form-wrapper input {
+    width:70%;
+    height: 25px;
+    padding: 3px 5px;
+    float: left;
+    font: bold 15px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    border: 0;
+    background: #f9f9f7;
+    border-radius: 3px;
+}
+.form-wrapper input:focus {
+    outline: 0;
+    background: #fff;
+    box-shadow: 0 0 2px rgba(0,0,0,.8) inset;
+}
+.form-wrapper input::-webkit-input-placeholder {
+    color: #999;
+    font-weight: normal;
+    font-style: italic;
+}
+.form-wrapper input:-moz-placeholder {
+    color: #999;
+    font-weight: normal;
+    font-style: italic;
+}
+.form-wrapper input:-ms-input-placeholder {
+    color: #999;
+    font-weight: normal;
+    font-style: italic;
+}
+/* Form submit button */
+.form-wrapper button {
+    height: 35px;
+    width: 25%;
+    font: bold 14px/26px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    overflow: visible;
+    position: relative;
+    float: right;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    color: #fff;
+    background: #0074d4;
+    border-radius:3px;
+
+}
+.form-wrapper button:hover{
+    background: #0074d4;
+}
+.form-wrapper button:active,
+.form-wrapper button:focus{
+    background: #0074d4;
+    outline: 0;
+}
+.form-wrapper button:before { /* left arrow */
+    content: '';
+    position: absolute;
+    border-width: 1px 1px 1px 0;
+    border-style: solid solid solid none;
+    border-color: transparent #0074d4 transparent;
+    top: 5px;
+    left: -6px;
+}
+.form-wrapper button:hover:before{
+    border-right-color: #0074d4;
+}
+.form-wrapper button:focus:before,
+.form-wrapper button:active:before{
+    border-right-color: #0074d4;
+}
+.form-wrapper button::-moz-focus-inner { /* remove extra button spacing for Mozilla Firefox */
+    border: 0;
+    padding: 0;
+}

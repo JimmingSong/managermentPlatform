@@ -1,0 +1,901 @@
+* {
+    margin: 0;
+}
+/*右键菜单*/
+.right-menu{
+    border-radius: 5%;
+    width: 3.5rem;
+    position: absolute;
+    border: 1px solid #888;
+    padding: 0.1rem 0.2rem;
+    background-color: #fff;
+    text-align: center;
+    z-index: 9999;
+    cursor: pointer;
+}
+.right-menu-child {
+    border-bottom: 1px solid #ccc;
+    font-size: 0.45rem;
+    height: 0.8rem;
+    line-height: 0.8rem;
+}
+body{
+    margin: 0;
+}
+#data-handle{
+    background-color: #ffffff;
+    display: flex;
+    height: 100vh;
+    position: relative;
+}
+#data-left,#data-right{
+    width: 20%;
+    border:1px solid #666666;
+    display: flex;
+    flex-direction: column;
+}
+
+#id-list, #data-class {
+    height: 60%;
+}
+.showPop{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 20000;
+    background: #99CCCC;
+    border-radius: 4px;
+    transform: translate(-50%,-50%);
+    width: 20%;
+    height: 35%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.showPop>div{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.showPop>div:first-child{
+    justify-content: center;
+}
+.showPop>div:last-child{
+    justify-content: space-around;
+}
+.showPop input{
+    height: 50%;
+    border-radius: 4px;
+    border: 1px solid #fff;
+    width: 55%;
+}
+.showPop span{
+    display: inline-block;
+    width: 25%;
+    text-align: center;
+}
+.showPop button{
+    background: #000099;
+    padding: 2% 4%;
+    border-radius: 6px;
+    border: 1px solid #000099;
+    color: #fff;
+    font-size: .35rem;
+}
+.project-icon {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+#com-model, #tree-show {
+    height: 650px;
+    display: flex;
+    flex-direction: column;
+    flex-grow:1;
+    position: relative;
+}
+.model-con{
+    height: 100%;
+}
+
+.model-con1 {
+    height: 90%;
+    overflow: auto;
+    background: #ffffff;
+    position: relative;
+}
+.project-title{
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    background: #0074d4;
+    color: #ffffff;
+    padding: 4px 0;
+    box-sizing: border-box;
+}
+.project-title + div{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 3px;
+}
+.list-ul{
+    overflow-y: auto;
+    margin-left: 3px;
+    height: 83%;
+}
+.list-ul>li{
+    padding:5px 0;
+    margin: 3px 0;
+}
+.model-title{
+    display: flex;
+    justify-content: space-around;
+}
+.model-title>span{
+    flex-grow: 1;
+    color: #ffffff;
+    padding: 5px 0;
+    text-align: center;
+    cursor: pointer;
+}
+.model-title>span:first-child,.model-title>span:nth-child(2),.model-title>span:nth-child(3){
+    border-right: 1px solid #ffffff;
+}
+.model-t,.model-t1,.model-t2{
+    background:#0074d4
+}
+.model-show,.model-show1,.model-show2{
+    background: #000099;
+}
+.model-title>span:hover{
+    background: #000099;
+}
+
+.component, .layout, .iconfont1, .model-m {
+    height: 100%;
+}
+
+.layout, .component, .iconfont1 {
+    overflow-y: auto;
+}
+
+.component > div, .layout > div, .iconfont1 > div:hover, .component > span.iconfont {
+    cursor: pointer;
+}
+
+.comPop {
+    background-color: #fff;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    padding: 8px;
+    z-index: 2000;
+    width: 55%;
+    position: absolute;
+    left: 100%;
+    top: 0;
+}
+
+.comPop input {
+    width: 30px;
+}
+.iconSearch{
+    display: flex;
+    justify-content:space-around;
+    margin-top: 3px;
+}
+.iconSearch input:first-child{
+    width: 50%;
+}
+.showIconData{
+    width: 70%;
+    margin:2px 3%;
+}
+.showSeaIcon{
+    width: 100%;
+    height: 100px;
+    overflow: auto;
+    display: none;
+}
+.showInput{
+    display: none;
+    float: left;
+}
+/*中间展示样式*/
+#data-middle{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: #eeeeee;
+    border: 1px solid #666666;
+    flex-grow: 1;
+    width: 59%;
+}
+/*手机型号样式*/
+.footShow {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    background: #cccccc;
+    height: 35px;
+    line-height: 35px;
+}
+
+.show-size{
+    display: flex;
+    justify-content: space-between;
+    /*padding:5px;*/
+    /*background: #cccccc;*/
+    /*height: 35px;*/
+    line-height: 35px;
+}
+
+.show-size > div > select {
+    padding: 3px;
+    min-width: 100px;
+    border-radius: 5px;
+}
+
+/*预览模式*/
+.writeModel{
+    display: flex;
+    justify-content: flex-end;
+}
+.wm_btn{
+    background: #0074d4;
+    color: #ffffff;
+    padding: 7px 12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline: none;
+}
+.wm_btn:hover{
+    cursor: pointer;
+}
+.wm_show{
+    background: #000099;
+}
+/*展示区样式*/
+#phone {
+    /*display: flex;*/
+    flex-grow: 1;
+    overflow: auto;
+    position: relative;
+
+}
+
+#phone-show, #phone-read {
+    border: 1px solid #666666;
+    border-radius: 40px;
+    margin:0 auto;
+    width: 500px;
+    height: 892px;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+.drag-rule{
+    display: none;
+    width:30%;
+    height: 30%;
+    background-color: #ffffff;
+    position: absolute;
+    left: 35%;
+    top:30%;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+.sound{
+    border:1px solid #888888;
+    width: 25%;
+    margin: 6% auto;
+}
+#bigAndSmall{
+    display: flex;
+    height: 25px;
+    justify-content: flex-end;
+    /*background:#cccccc;*/
+    /*align-items: center;*/
+}
+.show-screen{
+    height: 82%;
+    border:1px solid #888888;
+    margin: 0 15px;
+    position: relative;
+    transform: translate(0, 0)
+}
+.phone-btn{
+    width: 12%;
+    height: 7%;
+    margin: 3% auto;
+    border:1px solid #bbbbbb;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+.phone-line{
+    width:12%;
+    border: 1px solid #bbbbbb;
+    margin:0 auto;
+}
+
+.insertParPop {
+    width: 150px;
+    height: 80px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    padding: 5px;
+    position: absolute;
+    left: 40%;
+    top: 40%;
+    background: #ffffff;
+}
+/*右边属性 数据 交互 区*/
+/*#data-class{*/
+/*height: 650px;*/
+/*display: flex;*/
+/*flex-direction: column;*/
+/*flex-grow:1;*/
+/*position: relative;*/
+/*}*/
+/*#tree-show{*/
+/*height: 650px;*/
+/*display: flex;*/
+/*flex-direction: column;*/
+/*flex-grow:1;*/
+/*z-index: 500;*/
+/*}*/
+
+.dataCls {
+    height: 100%;
+}
+.current,.dataCurrent {
+    /*color: blue;*/
+    font-weight:bold;
+    background: #adadff;
+}
+.classNav{
+    height: 6%;
+    width: 100%;
+    display: flex;
+    flex-wrap:nowrap;
+    justify-content:space-around;
+    border-bottom:1px solid black;
+}
+
+.tagStyDiv {
+    height: 4%;
+}
+
+.classNav>.classTitle{
+    cursor: pointer;
+    flex-grow: 1;
+    text-align: center;
+    padding: 1% 0;
+}
+#content {
+    position: relative;
+    height: 80%;
+    overflow-y: auto;
+}
+.classClsDiv{
+    padding-bottom:2%;
+    width:100%;
+    border-bottom: 1px solid black;
+}
+
+.classCls {
+    height: 100%;
+}
+.selectClass1{
+    width: 30%;
+    height: 20px
+}
+.selectClass {
+    width: 20%;
+    height: 20px
+}
+.textCls{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inputClass {
+    width: 20%;
+    height: 20px
+}
+.classClsDiv>span,.classClsDiv form>span,.conversionCls span{
+    font-size:15px;
+    font-weight:bold;
+}
+.backgroundRadioCls{
+    display:inline-block;
+    text-align: center;
+    width:5%;
+    height:20px;
+}
+.conversionCls span{
+    display:inline-block;
+    text-align: center;
+    width:30%;
+    height:20px;
+}
+.conversionBtnCls{
+    margin-left:40%;
+    width:15%;
+    height:20px;
+    background:blue
+}
+.backgroundLabelCls,.conversionClass span,.conversionInputCls,.localizeClass .minSpan,.backgroundDivCls .minSpan{
+    display:inline-block;
+    text-align: center;
+    width:10%;
+    height:20px;
+}
+.conversionOne{
+    display:block;
+}
+.disDiv{
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    width:30%;
+    height:20px;
+    border:1px solid black;
+}
+.disDiv button{
+    height:15px;
+    border:none;
+    background: #ffffff;
+    outline: none;
+}
+.disInput{
+    width:40%;
+    height:10px;
+    border:none;
+    text-align: center;
+    background: #ffffff;
+    outline: none;
+}
+.conversionTwo{
+    display:none;
+}
+.flexDivCls>span{
+    font-weight:bold;
+}
+.marginDiv{
+    display: flex;
+    margin-left:30%;
+}
+.marginDiv .minSpan1{
+    text-align: center;
+    width:15%;
+}
+.marginClass .marginSpanCls{
+    text-align: center;
+    width:15%;
+}
+.marginClass .marginSpanCls1{
+    margin-left:30%;
+    text-align: center;
+    width:15%;
+}
+.whClass,.shadowClass,.transitionClass,.overflowClass,.backgroundDivCls,.wahClass,.tClass,.localizeClass,.foundationClass,.marginClass,.borderClass,.radiusClass,.flexClass,.textClass,.outlineDiv,.conversionClass{
+    display: flex;
+}
+
+.whClass span, .wahClass span, .backgroundInputCls, .shadowClass span.shadowSpanCls {
+    display:inline-block;
+    text-align: center;
+    width: 15%;
+    height: 20px;
+}
+
+.paddingDiv {
+    padding-bottom: 80px;
+}
+.delBtn {
+    text-align: center;
+    width: 20%;
+    height:20px;
+}
+
+div span.delSpan {
+    display: inline-block;
+    height: 20px;
+    width: 15%;
+    opacity: 0.2;
+    font-size: 0.2rem;
+}
+
+div span.delSpan:hover {
+    cursor: pointer;
+}
+.shadowClass span,.shadowClass label,.outlineDiv span{
+    display:inline-block;
+    text-align: center;
+    width: 25%;
+    height:20px;
+}
+.localizeClass>span,.transitionClass span,.overflowClass span,.foundationClass span,.foundationClass label,.tClass span,.marginClass span,.borderClass span,.radiusClass span,.flexClass span,.flexClass label,.textClass span,.backgroundSpan{
+    display:inline-block;
+    text-align: center;
+    width:30%;
+    height:20px;
+}
+.backgroundClass{
+    display: flex;
+
+}
+
+.addBgi {
+    width: 90%;
+    height: 150px;
+    border: 3px solid #ccc;
+    border-radius: 15px;
+    margin-left: 5%;
+}
+
+.addBgiDiv {
+    margin-top: 15%;
+    display: flex;
+}
+
+.addBgiDiv .addBgiSpan {
+    display: inline-block;
+    width: 40%;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+}
+
+.bgiBtn {
+    display: flex;
+    justify-content: space-around;
+    width: 50%;
+    height: 20px;
+    margin-left: 40%;
+    margin-top: 20%;
+}
+.backgroundImg {
+    display: inline-block;
+    width: 50%;
+    height: 20px;
+}
+.backgroundClass span{
+    display:inline-block;
+    text-align: center;
+    width:25%;
+    height:20px;
+}
+
+
+.inputCls{
+    width: 10%;
+    height: 20px
+}
+
+.inputCls1 {
+    width: 20%;
+    height: 20px;
+}
+
+.classCls span div span {
+    display: inline-block;
+    width: 20%;
+    height: 15px;
+    text-align: center;
+}
+
+.classClsDiv div span,.classClsDiv div label{
+    font-size:13px;
+    /*border:1px solid black;*/
+}
+.classDir{
+    position:absolute;
+    height: 5%;
+}
+.classDir .lis{
+    display:none;
+    position:absolute;
+    left:0pX;top:25px;
+    background:#ccc;
+}
+.handleCls select{
+    width: 80%;
+}
+.animate{
+    display: inline-block;
+    width:100%;
+    height:140px;
+    font-size:40px;
+    line-height: 140px;
+    text-align: center;
+    color:#0000D9;
+}
+.animateDiv{
+    display: flex;
+    justify-content: center;
+}
+.animateSel{
+    width:60%;
+    height:50px;
+    outline: none;
+    border: 1px solid #ccc;
+}
+.animateBtn{
+    border:1px solid #ccc;
+    margin-left: 10px;
+    background-color: #ffffff;
+}
+/*交互区*/
+.interation div, .interation > span {
+    margin: 8px 3% 0 3%;
+    padding-left:2px;
+}
+
+.interation > div:nth-child(2) {
+    height: 120px;
+    overflow: auto;
+}
+
+.interation .triggerMode {
+    display: block;
+    width: 90%;
+    border-bottom: 1px solid #bcccc0;
+}
+.increase{
+    margin-left: 8%;
+}
+.interation select{
+    margin: 3px 3%;
+    width: 93%;
+}
+.interation textarea{
+    width: 95%;
+    height: 150px;
+    margin-left: 2%;
+}
+/*右键菜单弹出框*/
+.right-menu{
+    border-radius: 5%;
+    /*width: 5rem;*/
+    position: absolute;
+    border: 1px solid #888;
+    padding: 0.1rem 0.2rem;
+    background-color: #fff;
+    text-align: center;
+    z-index: 9999;
+    cursor: pointer;
+}
+.right-menu-child {
+    border-bottom: 1px solid #ccc;
+    font-size: 0.45rem;
+    height: 1.3rem;
+    line-height: 1.3rem;
+}
+
+#chooseParag,#chooseCom{
+    width: 90%;
+    border:1px solid red;
+}
+
+.addCurCls .addCurSpan{
+    display: inline-block;
+    width:30%;
+    height:20px;
+    text-align: center;
+}
+.addCurCls .curData{
+    display: inline-block;
+    width:20px;
+    height:20px;
+    border:1px solid yellow;
+    text-align: center;
+}
+.curCls{
+    margin-left: 33%;
+}
+.comCls{
+    margin-left:10%;
+}
+.addCurClass{
+    margin-top:10px;
+    margin-left:60%;
+}
+.curSpan{
+    display: inline-block;
+    width:20%;
+    height:20px;
+    text-align: center;
+}
+.curInput{
+    width:50%;
+    height:20px
+}
+/*渲染规则样式*/
+.page_data>div{
+    /*padding:;*/
+}
+
+.inter {
+    position: relative;
+}
+
+.interDiv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #ffffff;
+    padding: 1rem;
+    box-shadow: 3px 3px 20px #000000;
+    box-sizing: border-box;
+}
+
+.interDiv input {
+    width: 20%;
+}
+
+/*约束规则*/
+.ruler-ti {
+    text-align: center;
+    margin: 0;
+    padding: 4% 0;
+    background: #24cbe5;
+    font-weight: bold;
+}
+
+.ruler-title {
+    display: flex;
+    justify-content: space-around;
+    padding: 6px 0;
+    box-sizing: border-box;
+    background: #79bae0;
+    color: #ffffff;
+}
+
+.ruler-title > div > i {
+    cursor: pointer;
+}
+
+.ruler-title > div {
+    display: flex;
+    justify-content: space-around;
+    width: 25%;
+}
+
+.ruler {
+    padding: 6px 10%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ruler-show {
+    background: #bf9670;
+}
+.ruler-show2 {
+    background: #5bc0de;
+}
+.span-btn {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.cssTree {
+    overflow-y: auto;
+}
+
+.comDataShow {
+    height: 80%;
+    overflow-y: auto;
+}
+
+.wordImg {
+    height: 100%;
+}
+
+/* 数据树 */
+.datatreediv {
+    height: 85%;
+    overflow: auto;
+}
+.datatree {
+    margin-left: 10%;
+}
+.datatree>p {
+    font-size: 14px;
+    margin: 0px;
+}
+.vshow {
+    display: none;
+}
+.frame {
+    margin: 10px;
+    border: 1px solid #232323;
+    /* width: 80%; */
+    width: 50px;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+    background-color: #a3b8c9
+}
+.list {
+    margin: 10px;
+    width: 200px;
+    border: 1px solid #232323;
+    background-color: #fafafa;
+}
+/* 添加组件 */
+.addcomp {
+    width: 180px;
+    border: 1px solid #232323;
+    background-color: #fafafa;
+}
+/* 页面 & 段 数据编辑框 */
+.dataEdit {
+    width: 200px;
+    border: 1px solid #232323;
+    background-color: #fafafa;
+}
+/*遮罩层*/
+.shadeShadow{
+    position: absolute;
+    left:0;
+    top: 0;
+    z-index: 19999;
+    width: 100%;
+    height:100vh;
+    background: rgba(0,0,0,0.6);
+}
+
+.updateData {
+    position: absolute;
+    left: 20%;
+    top: 10%;
+    z-index: 1000;
+    border: 1px solid #aaa;
+    padding: 1%;
+    border-radius: 15px;
+    background: #99CCCC;
+}
+
+.updateData button {
+    background: #000099;
+    padding: 4% 6%;
+    border-radius: 6px;
+    border: 1px solid #000099;
+    color: #fff;
+    font-size: .35rem;
+}
+
+.updateData input {
+    margin: 5px 0;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    height: .5rem;
+}
+.addRen{
+    cursor: default;
+    margin-left:.6rem;
+}
+.clearCls{
+    float: right;
+    cursor: default;
+    margin-right: 10%;
+    outline: none;
+}
+.EventList{
+    cursor: default;
+}
+.deleteEventList{
+    display: none;
+    margin-left: 5%;
+}
+.EventList:hover .deleteEventList{
+    display: inline;
+}
+
+.proShowName {
+    background: #adadff;
+}
