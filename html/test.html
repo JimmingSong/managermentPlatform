@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rander函数</title>
+    <script src=" https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script src="../js/utils/jquery-1.11.3.js"></script>
+    <script src="../js/utils/dialogUti.js"></script>
+    <style>
+        #app{
+            border: 1px solid #000;
+            width: 400px;
+            height: 400px;
+        }
+        #app1{
+            border: 1px solid #000;
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+<div id="app" tabindex="0"></div>
+<div id="app1" tabindex="0"></div>
+<script>
+   var d = document.getElementById("app");
+   var d1 = document.getElementById("app1");
+   console.log(document.activeElement === d);
+   d.onclick = function () {
+       console.log(d.tabIndex);
+       console.log("第一");
+       console.log(document.activeElement === d);
+       console.log("第二");
+       console.log(document.activeElement === d1);
+   };
+   d1.onclick = function () {
+       console.log("第一");
+       console.log(document.activeElement === d);
+       console.log("第二");
+       console.log(document.activeElement === d1);
+   }
+</script>
+</body>
+</html>

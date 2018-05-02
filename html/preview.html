@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>页面预览</title>
+    <link rel="stylesheet" href="../css/cache.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/showView.css">
+    <link rel="stylesheet" href="../css/all.css">
+    <link rel="stylesheet" href="../css/style/iconfont.css">
+    <link rel="stylesheet" href="../css/layer.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <script src="../js/showTree/showTreeVariable.js"></script>
+</head>
+<body>
+<div id="phone1">
+    <container :data="item" :index="index" :pd="lookData.st" v-for="(item,index) in lookData.st.chr"></container>
+</div>
+<script src="../js/utils/jquery-1.11.3.js"></script>
+<script src="../js/utils/layer.js"></script>
+<script src="../js/utils/city.js"></script>
+<script src="https://cdn.bootcss.com/bluebird/3.5.1/bluebird.min.js"></script>
+<script src="../js/utils/ajax.js"></script>
+<script src="../js/utils/bindEvent.js"></script>
+<script src="../js/utils/format.js"></script>
+<script src="../js/utils/CloneUtil.js"></script>
+<script src="../js/utils/ajax.js"></script>
+<script src="../js/cssClass/attributeParse.js"></script>
+<script src="../js/utils/analyzeExpression.js"></script>
+<script src="../js/utils/dialogUti.js"></script>
+<script src="../js/comData/getCssData.js"></script>
+<script src="../js/getLayoutData.js"></script>
+<script src="../js/createLayoutDom.js"></script>
+<script src="../js/comAndLayout/createDom.js"></script>
+<script src="../js/Fun.js"></script>
+<script src="../js/InitWeb.js"></script>
+<script src="../js/phoneModel/cssDynaCache.js"></script>
+<script src="../js/phoneModel/LookShow/EventParse.js"></script>
+<script src="../js/phoneModel/DataTreeParse.js"></script>
+<script src="../js/phoneModel/LookShow/cssDomBind.js"></script>
+<script src="../js/phoneModel/PlayShow/cssDomBind.js"></script>
+<script src="../js/phoneModel/dataRenderMatch.js"></script>
+<script src="../js/phoneModel/CssParse.js"></script>
+<script src="../js/phoneModel/PlayShow/dsDeal.js"></script>
+<!--数据引入-->
+<script src="../js/phoneModel/PlayShow/phoneModelVariable.js"></script>
+<script src="../js/phoneModel/LookShow/lookVariable.js"></script>
+<script src="../js/phoneModel/showVariable.js"></script>
+<script src="../js/selShowPhone/selShowPhoneVariable.js"></script>
+<script src="../js/projectID/projectIDVariable.js"></script>
+<script src="../js/vue.js"></script>
+
+<script src="../js/showTree/modifyContAndComp.js"></script>
+
+<!--显示区放大或缩小-->
+<script src="../js/bigAndSmall/bigAndSmall.js"></script>
+<script src="../js/bigAndSmall/bigAndSmallVariable.js"></script>
+<!--<script src="../js/bigAndSmall/bigAndSmallVue.js"></script>-->
+<!--基本组件和布局-->
+<script src="../js/comAndLayout/comAndLayoutAjax.js"></script>
+<script src="../js/comAndLayout/CreateView.js"></script>
+<script src="../js/comAndLayout/getCssData.js"></script>
+<script src="../js/comAndLayout/getData.js"></script>
+<script src="../js/comAndLayout/comAndLayoutVariable.js"></script>
+<script src="../js/comAndLayout/comAndLayout.js"></script>
+<script src="../js/comAndLayout/comAndLayoutComponent.js"></script>
+<!--<script src="../js/comAndLayout/comAndLayoutVue.js"></script>-->
+<!--属性和数据区-->
+<script src="../js/cssClass/clsNameJoin.js"></script>
+<script src="../js/cssClass/cssClassVariable.js"></script>
+<script src="../js/cssClass/cssClass.js"></script>
+<script src="../js/cssClass/cssComponent.js"></script>
+<!--<script src="../js/cssClass/cssClassVue.js"></script>-->
+<!--展示区域-->
+<script src="../js/phoneModel/PlayShow/phoneComponent.js"></script>
+<script src="../js/phoneModel/LookShow/lookComponent.js"></script>
+<script src="../js/phoneModel/PlayShow/phoneModel.js"></script>
+<script src="../js/phoneModel/phoneVue1.js"></script>
+<!--组件tree和页面tree展示区-->
+<script src="../js/showTree/showTree.js"></script>
+<script src="../js/showTree/showTreeComponent.js"></script>
+<!--<script src="../js/showTree/showTreeVue.js"></script>-->
+<!--项目名称ID展示区-->
+<script src="../js/projectID/projectID.js"></script>
+<script src="../js/projectID/projectIDComponent.js"></script>
+<!--<script src="../js/projectID/projectIDVue.js"></script>-->
+<!--选择展示区模型-->
+<!--<script src="../js/selShowPhone/selShowPhone.js"></script>-->
+<!--<script src="../js/selShowPhone/selShowPhoneVue.js"></script>-->
+
+<script src="../js/phoneModel/initView.js"></script>
+<!--初始化平台-->
+<script src="../js/initView.js"></script>
+<script>
+    (function () {
+        var phone = document.body;
+        remSetting = new RemSetting(phone, 1 / 50);
+    })();
+    //    window.onload = function () {
+    //        var phone = document.body;
+    //        remSetting = new RemSetting(phone, 1 / 50);
+    //    };
+    initView();
+    let parameter = location.search;
+    function getParameter(url) {
+        let parameterObj = {};
+        if (url.indexOf("?") != -1) {
+            let paraString = url.substr(1);
+            let paraArr = paraString.split("&");
+            for (var item of paraArr) {
+                parameterObj[item.split("=")[0]] = item.split("=")[1]
+            }
+        }
+        return parameterObj;
+    }
+    let paraList = getParameter(parameter);
+    let id = paraList.id;
+    id = decodeURIComponent(id);
+    let paragraphData = JSON.parse(localStorage.getItem(id));
+    //解析数据中的样式，并缓存到本地
+    parseAllPageCls(paragraphData);
+    //将数据传给预览页面
+    phoneData.lookData = lookPhone = getParsePageData(paragraphData);
+    pageList.push(paragraphData);
+</script>
+</body>
+</html>

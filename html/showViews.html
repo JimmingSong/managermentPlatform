@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>数据管理</title>
+    <!--<link rel="short icon" href="">-->
+    <link rel="stylesheet" href="../css/cache.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/showView.css">
+    <link rel="stylesheet" href="../css/all.css">
+    <link rel="stylesheet" href="../css/style/iconfont.css">
+    <link rel="stylesheet" href="../css/layer.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <script src="../js/showTree/showTreeVariable.js"></script>
+</head>
+<body>
+<div id="container">
+    <div class="base-top">
+        <button>注销</button>
+        <span></span>
+    </div>
+    <!--<div class="bar">
+        <div class="menu-btn">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <ul>
+            <li><a href="showViews.html" style="color:#000">数据管理</a></li>
+            <li><a href="#">css库管理</a></li>
+            <li><a href="#">字段库管理</a></li>
+            <li><a href="#">字体图标库管理</a></li>
+            <li><a href="#">css样式库管理</a></li>
+            <li><a href="#">基本类管理</a></li>
+        </ul>
+    </div>-->
+    <div id="data-handle">
+        <div id="data-left">
+            <div id="id-list">
+                <div class="project-title">
+                    <span>{{t}}</span>
+                </div>
+                <div class="project-icon">
+                    <span class="iconfont" @click="showPopup()">&#xe64b;</span>
+                    <i class="iconfont" @click="searchFun()">&#xe626;</i>
+                    <!--<span class="iconfont" @click="deletePro()">&#xe711;</span>-->
+                    <!--<input type="text" v-model="projectId" @keydown="search($event)">-->
+                </div>
+                <div v-show="popShow"  class="showPop">
+                    <div>
+                        <span v-show="!addOrSearch">搜索页面</span>
+                        <span v-show="addOrSearch">添加页面</span>
+                    </div>
+                    <div>
+                        <span>ID: </span><input type="text" class="proName" v-model="pId" autofocus
+                                                @keydown="keyDown($event)"><br>
+                    </div>
+                    <div>
+                        <span>type：</span><input type="text" class="pro" v-model="pType" @keydown="keyDown($event)"><br>
+                    </div>
+                    <div>
+                        <span>name：</span><input type="text" class="pro" v-model="pName" @keydown="keyDown($event)"><br>
+                    </div>
+                    <div>
+                        <button class="butValue1" @click="cancel()">取消</button>
+                        <button class="butValue" @click="addPro()">确定</button>
+                    </div>
+                </div>
+                <ul class="list-ul" >
+                    <li v-for="(item,index) in id" @click="chec(item,index,$event)" @mouseup="menu($event,index,item)"
+                        @contextmenu="preventClick($event)">
+                        <span>{{item}}</span>
+                    </li>
+                </ul>
+                <div class="updateData" v-show="updateShow===1||updateShow ===2">
+                    <input type="text" class="tx-align-center" placeholder="旧ID" v-model="updatePage.oId" disabled><br/>
+                    <input type="text" class="tx-align-center" placeholder="请输入新ID" v-model="updatePage.id"><br/>
+                    <input type="text" class="tx-align-center" placeholder="请输入type" v-model="updatePage.tp"><br/>
+                    <input type="text" class="tx-align-center" placeholder="请输入name" v-model="updatePage.name"><br/>
+                    <div>
+                        <button @click="updateCancelClick()">取消</button>
+                        <button @click="updateSureClick()">确定</button>
+                    </div>
+                </div>
+            </div>
+            <div id="com-model">
+                <div class="model-title">
+                    <span class="model-t model-show" @click="comClick($event)">组件</span>
+                    <span class="model-t" @click="layClick($event)">布局</span>
+                    <span class="model-t " @click="iconfont($event)">字体图标</span>
+                    <span class="model-t" @click="modelMClick($event)">模板</span>
+                </div>
+                <div class="model-con" style="overflow-y: auto">
+                    <div class="component" v-show="lbshow==0">
+                        <span class="iconfont" @click="setPosition($event)" style="float: right">&#xe63b;</span>
+                        <div class="comPop" v-show="comPop.isShow==0">
+                            <span>设置默认插入位置</span>
+                            <span>共{{parLength}}段</span>
+                            <div>
+                                <span>第</span>
+                                <input type="text" v-model="comPop.parValue">
+                                <span>段</span>
+                            </div>
+                            <div>
+                                <span>第</span>
+                                <input type="text" v-model="comPop.couValue">
+                                <span>个</span>
+                            </div>
+                            <button @click="getPosition($event)">确定</button>
+                            <button @click="canPositon($event)">取消</button>
+                        </div>
+                        <com :data="comDatas"></com>
+                    </div>
+                    <div class="layout" v-show="lbshow==1">
+                        <layout :data="layoutData"></layout>
+                    </div>
+                    <div class="iconfont wordImg" v-show="lbshow==2">
+                        <div class="iconSearch">
+                            <input type="text" v-model="icon.searchIconName" @keydown="searchIcon($event)"
+                                   placeholder="请输入您要查找的内容">
+                            <input style="width: 40%" type="text" v-model="icon.searchIconValue" placeholder="显示图标内容">
+                        </div>
+                        <icons :data="icon"></icons>
+                    </div>
+                    <div class="model-m" v-show="lbshow==3">
+                        <span>{{model}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="data-middle">
+            <div id="phone">
+                <div id="phone-show">
+                    <div class="sound"></div>
+                    <div class="show-screen" tabindex="0" id="show-screen">
+                        <div class="insertParPop" v-show="addToParag.isShow">
+                            <div>
+                                <span>共</span>
+                                <span>{{addToParag.parLength}}</span>
+                                <span>段</span>
+                            </div>
+                            <div>
+                                <span>插入第</span>
+                                <input type="text" style="width:30px" v-model="addToParag.usePar"
+                                       onafterpaste="value=(parseInt((value=value.replace(/\D/g,''))==''||parseInt((value=value.replace(/\D/g,''))==0)?'1':value,10))"
+                                       @keydown="addKeyDown($event)">
+                                <span>段</span>
+                            </div>
+                            <button :data="addToParag.usePar" @click="confirmUse($event)">确定</button>
+                            <button @click="cancelUse($event)">取消</button>
+                        </div>
+                        <div style="height: 100%;overflow-y: auto;" v-show="!isShow">
+                            <container1 :data="item" :index="index" :pd="playData.st"
+                                        v-for="(item,index) in playData.st.chr"></container1>
+                        </div>
+                        <!--预览模式-->
+                        <div style="height: 100%;overflow-y: auto;" v-show="isShow">
+                            <container :data="item" :index="index" :pd="lookData.st"
+                                       v-for="(item,index) in lookData.st.chr"></container>
+                        </div>
+                    </div>
+                    <div class="phone-btn"></div>
+                </div>
+            </div>
+            <div class="footShow">
+                <div id="show-size" class="show-size">
+                    <div>
+                        <span>手机型号</span>
+                        <select v-model="phoneType" @change="selectPhoneType()">
+                            <option v-for="item in size" :value=item.size.x>{{item.name}}</option>
+                        </select>
+                    </div>
+                    <div class="writeModel">
+                        <button id="wm_btn" class="wm_btn wm_show" @click="writeMode($event)">编辑模式</button>
+                        <button class="wm_btn" @click="previewMode($event)">预览模式</button>
+                        <button class="wm_btn" @click="previewToBrow($event)">真实预览</button>
+                    </div>
+                </div>
+                <div id="bigAndSmall">
+                    <span>放大或缩小比例: </span>
+                    <input type="number" step="10" min="40" :value="100" v-model="size" @mousewheel="changeSize"
+                           style="width:50px;margin-top: 5px">
+                </div>
+            </div>
+        </div>
+        <div id="data-right" >
+            <div id="data-class">
+                <div class="dataCls">
+                    <!--操作区-->
+                    <div v-show="rtShow==0" class="dataCls">
+                        <!--导航栏-->
+                        <div class="model-title">
+                            <span class="model-t1 model-show1" @click="classClick($event)">属性</span>
+                            <span class="model-t1" @click="dataClick($event)">数据</span>
+                            <span class="model-t1" @click="interactiveClick($event)">交互</span>
+                            <span class="model-t1" @click="handleClick($event)" v-show="layIsShow">布局</span>
+                        </div>
+                        <!--交互样式设置完成后的 确定按钮-->
+                        <div v-show="eventObj.addCls">
+                            <span>修改样式设置成功,请点击确定按钮</span>
+                            <button @click="sureBtn()">确定</button>
+                        </div>
+                        <div class="model-con">
+                            <!--属性操作区-->
+                            <div class="classCls" v-show="playShow==0">
+                                <div class="tagStyDiv">
+                                    <span class="tagSty">标签</span>
+                                    <span>{{clsobj.tag}}</span>
+                                    <button class="clearCls" @click="clearCls()">清空</button>
+                                </div>
+                                <div class="classNav">
+                                    <span class="classTitle current" @click="classBaseClick($event)">基本</span>
+                                    <span class="classTitle" @click="classMoseClick($event)">高级</span>
+                                    <span class="classTitle" @click="classExtensionClick($event)">扩展</span>
+                                    <span class="classTitle" @click="classAnimationClick($event)">动画</span>
+                                </div>
+                                <div id="content">
+                                    <div v-show="clsPlayShow==0">
+                                        <div class="classDir" v-show="clsPlayShow==0">
+                                            <button class="directory" @click="directory1Click($event)">目录</button>
+                                            <ul class="lis">
+                                                <li><a href="#wh">宽高</a></li>
+                                                <li><a href="#t">文本</a></li>
+                                                <li><a href="#localize">定位</a></li>
+                                                <li><a href="#foundation">基础</a></li>
+                                                <li><a href="#margin">边距</a></li>
+                                                <li><a href="#border">边框</a></li>
+                                                <li><a href="#radius">圆角</a></li>
+                                                <li><a href="#flex">flex布局</a></li>
+                                            </ul>
+                                        </div>
+                                        <div id="wh" class="classClsDiv">
+                                            <span>宽高</span>
+                                            <div class="whClass">
+                                                <span>宽</span>
+                                                <selnum :data="cls.numValue.wd"></selnum>
+                                                <span>单位</span>
+                                                <select name="wd" class="selectClass" v-model="cls.numValue.wd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit1" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="w" title="清除宽属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="whClass">
+                                                <span>高</span>
+                                                <selnum :data="cls.numValue.hd"></selnum>
+                                                <span>单位</span>
+                                                <select name="hd" class="selectClass" v-model="cls.numValue.hd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit1" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="h" title="清除高属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                        </div>
+                                        <div id="t" class="classClsDiv">
+                                            <span>文本</span>
+                                            <div class="tClass">
+                                                <span>字体</span>
+                                                <select name="ff" class="selectClass1" v-model="cls.numValue.ffd"
+                                                        @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.opFf" :value=item.v>{{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="ff" title="清除字体属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="tClass">
+                                                <span>尺寸</span>
+                                                <selnum :data="cls.numValue.fsd"></selnum>
+                                                <span class="-i delSpan" id="fs" title="清除字体尺寸属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="tClass">
+                                                <span>单位</span>
+                                                <select name="fsd" class="selectClass1" v-model="cls.numValue.fsd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="tClass">
+                                                <span>字体颜色</span>
+                                                <input type="color" name="c" class="inputCls" v-model="cls.numValue.c"
+                                                       @change="cChange($event)">
+                                                <input type="text" name="c" class="inputCls1" v-model="cls.numValue.c"
+                                                       @blur="cChange($event)" @keydown="colorChange($event)"
+                                                       onkeyup="value=value.replace(/[^\w#]|_/ig,'')">
+                                            </div>
+                                            <div class="tClass">
+                                                <span>颜色透明</span>
+                                                <btn :data="cls.numValue.ct"></btn>
+                                            </div>
+                                            <div class="textCls">
+                                                <btn :data="cls.numValue.fw"></btn>
+                                                <btn :data="cls.numValue.ft"></btn>
+                                                <btn :data="cls.numValue.tlo"></btn>
+                                                <btn :data="cls.numValue.tlu"></btn>
+                                                <btn :data="cls.numValue.tll"></btn>
+                                            </div>
+                                            <div class="textCls">
+                                                <btn :data="cls.numValue.tal"></btn>
+                                                <btn :data="cls.numValue.tar"></btn>
+                                                <btn :data="cls.numValue.tac"></btn>
+                                            </div>
+                                        </div>
+                                        <div id="localize" class="classClsDiv">
+                                            <span>定位</span>
+                                            <div class="localizeClass">
+                                                <span>定位方式</span>
+                                                <select name="p" class="selectClass1" v-model="cls.numValue.pd"
+                                                        @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.pos" :value=item.v>{{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="p" title="清除定位方式属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="localizeClass">
+                                                <span>相对点</span>
+                                                <select name="pos" class="selectClass1"
+                                                        v-model="cls.numValue.pospoint" @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.posP" :value=item.v>{{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="localizeClass">
+                                                <span>坐标</span>
+                                                <span class="minSpan">X</span>
+                                                <selnum :data="cls.numValue.lrd"></selnum>
+                                            </div>
+                                            <div class="marginDiv">
+                                                <span class="minSpan1">单位</span>
+                                                <select name="lr" class="selectClass1" v-model="cls.numValue.lrd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span style="margin-left:10px" class="-i delSpan" id="lr"
+                                                      title="清除定位水平方向属性" @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="marginDiv">
+                                                <span class="minSpan1">Y</span>
+                                                <selnum :data="cls.numValue.tbd"></selnum>
+                                            </div>
+                                            <div class="marginDiv">
+                                                <span class="minSpan1">单位</span>
+                                                <select name="tb" class="selectClass1" v-model="cls.numValue.tbd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" style="margin-left:10px" id="tb"
+                                                      title="清除定位竖直方向属性" @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="localizeClass">
+                                                <span>浮动</span>
+                                                <btn :data="cls.numValue.fl"></btn>
+                                                <btn :data="cls.numValue.fr"></btn>
+                                                <btn :data="cls.numValue.fc"></btn>
+                                            </div>
+                                        </div>
+                                        <div id="foundation" class="classClsDiv">
+                                            <span>基础</span>
+                                            <div class="foundationClass">
+                                                <span>元素类型</span>
+                                                <select name="d" class="selectClass1" v-model="cls.numValue.dd"
+                                                        @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.fType" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+
+                                            </div>
+                                            <div class="foundationClass">
+                                                <span>盒模型</span>
+                                                <select name="bx" class="selectClass1" v-model="cls.numValue.bxd"
+                                                        @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.bxType" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+
+                                            </div>
+                                            <div class="foundationClass">
+                                                <span>透明度</span>
+                                                <div class="disDiv">
+                                                    <button @mousedown="btnAdd1Click($event)">+</button>
+                                                    <input type="text" v-model="cls.numValue.od.value" class="disInput"
+                                                           name="o" @blur="oBlur($event)" @keydown="okeyDown($event)">
+                                                    <button @mousedown="btnSubtraction1Click($event)">-</button>
+                                                </div>
+                                                <span class="-i delSpan" id="o" title="清除透明度属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="foundationClass">
+                                                <span>优先级</span>
+                                                <selnum :data="cls.numValue.zdd"></selnum>
+                                                <span class="-i delSpan" id="zd" title="清除优先级属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="foundationClass">
+                                                <span>背景颜色</span>
+                                                <input type="color" name="bc" class="inputCls" v-model="cls.numValue.bc"
+                                                       @change="cChange($event)">
+                                                <input type="text" style="width:25%" name="bc" class="inputCls1"
+                                                       v-model="cls.numValue.bc"
+                                                       @blur="cChange($event)" @keydown="colorChange($event)"
+                                                       onkeyup="value=value.replace(/[^\w#(),.]|_/ig,'')">
+                                            </div>
+                                            <div class="foundationClass">
+                                                <span>颜色透明</span>
+                                                <btn :data="cls.numValue.bct"></btn>
+                                            </div>
+                                            <div class="foundationClass">
+                                                <span>字体图标</span>
+                                                <btn :data="cls.numValue.i"></btn>
+                                            </div>
+                                            <div class="foundationClass">
+                                                <span>不可见</span>
+                                                <checkbox :data="cls.numValue.vv"></checkbox>
+                                            </div>
+                                        </div>
+                                        <div id="margin" class="classClsDiv">
+                                            <span>边距</span>
+                                            <div class="marginClass">
+                                                <span>边距样式</span>
+                                                <span class="marginSpanCls">边距</span>
+                                                <select name="margin" class="selectClass"
+                                                        v-model="cls.numValue.selMarPad" @change="marPadChange($event)">
+                                                    <option v-for="item in cls.numValue.marPad" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="m" title="清除边距属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="marginClass">
+                                                <span class="marginSpanCls1">位置</span>
+                                                <select name="m" class="selectClass"
+                                                        v-model="cls.numValue.marginPadding" id="selectMarPad"
+                                                        @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.margin" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="marginClass">
+                                                <span>距离</span>
+                                                <selnum :data="cls.numValue.md"></selnum>
+                                            </div>
+                                            <div class="marginClass">
+                                                <span>单位</span>
+                                                <select name="md" class="selectClass1" v-model="cls.numValue.md.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div id="border" class="classClsDiv">
+                                            <span>边框</span>
+                                            <div class="borderClass">
+                                                <span>边框位置</span>
+                                                <select name="bw" class="selectClass1" v-model="cls.numValue.selBord"
+                                                        @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.border" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="bw" title="清除边框属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="borderClass">
+                                                <span>线宽</span>
+                                                <selnum :data="cls.numValue.bwd"></selnum>
+                                            </div>
+                                            <div class="borderClass">
+                                                <span>单位</span>
+                                                <select name="bwd" class="selectClass1" v-model="cls.numValue.bwd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="borderClass">
+                                                <span>线型</span>
+                                                <select name="bs" class="selectClass1" v-model="cls.numValue.bsd"
+                                                        @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.borSty" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="borderClass">
+                                                <span>颜色</span>
+                                                <input type="color" name="bdc" class="inputCls"
+                                                       v-model="cls.numValue.bdc" @change="cChange($event)">
+                                                <input type="text" width="25%" name="bdc" class="inputCls1"
+                                                       v-model="cls.numValue.bdc" @blur="cChange($event)"
+                                                       @keydown="colorChange($event)"
+                                                       onkeyup="value=value.replace(/[^\w#]|_/ig,'')">
+                                            </div>
+                                            <div class="borderClass">
+                                                <span>颜色透明</span>
+                                                <btn :data="cls.numValue.bdct"></btn>
+                                            </div>
+                                        </div>
+                                        <div id="radius" class="classClsDiv">
+                                            <span>圆角</span>
+                                            <div class="radiusClass">
+                                                <span>圆角位置</span>
+                                                <select name="border-radius" class="selectClass1"
+                                                        v-model="cls.numValue.selBorRad" @change="brChange($event)">
+                                                    <option v-for="item in cls.numValue.borRad" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="br" title="清除圆角属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="radiusClass">
+                                                <span>大小</span>
+                                                <selnum :data="cls.numValue.brd"></selnum>
+                                                <!--<span class="-i">&#xe64b;</span>-->
+                                            </div>
+                                            <div class="radiusClass">
+                                                <span>单位</span>
+                                                <select name="brd" class="selectClass1" v-model="cls.numValue.brd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="radiusClass">
+                                                <span>大小</span>
+                                                <selnum :data="cls.numValue.brtd"></selnum>
+                                            </div>
+                                            <div class="radiusClass">
+                                                <span>单位</span>
+                                                <select name="brd" class="selectClass1" v-model="cls.numValue.brtd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div id="flex" class="classClsDiv">
+                                            <span>flex布局</span>
+                                            <div class="flexDivCls">
+                                                <span>自己</span>
+                                                <div class="flexClass">
+                                                    <span>轴方向</span>
+                                                    <btn :data="cls.numValue.fdr"></btn>
+                                                    <btn :data="cls.numValue.fdrr"></btn>
+                                                    <btn :data="cls.numValue.fdcr"></btn>
+                                                    <btn :data="cls.numValue.fdc"></btn>
+                                                </div>
+                                                <div class="flexClass">
+                                                    <span>换行</span>
+                                                    <checkbox :data="cls.numValue.frnw"></checkbox>
+
+                                                </div>
+                                                <div class="flexClass">
+                                                    <span>主轴排列</span>
+                                                    <btn :data="cls.numValue.jcc"></btn>
+                                                    <btn :data="cls.numValue.jcs"></btn>
+                                                    <btn :data="cls.numValue.jce"></btn>
+                                                    <btn :data="cls.numValue.jcar"></btn>
+                                                    <btn :data="cls.numValue.jcsb"></btn>
+                                                </div>
+                                                <div class="flexClass">
+                                                    <span>交叉轴排列</span>
+                                                    <btn :data="cls.numValue.aifs"></btn>
+                                                    <btn :data="cls.numValue.aife"></btn>
+                                                    <btn :data="cls.numValue.aic"></btn>
+                                                </div>
+                                            </div>
+                                            <div class="flexDivCls paddingDiv">
+                                                <span>子项（需要点击到子项上）</span>
+                                                <div class="flexClass">
+                                                    <span>排列方式</span>
+                                                    <selnum :data="cls.numValue.order"></selnum>
+                                                    <span class="-i delSpan" id="ord" title="清除排列方式属性"
+                                                          @click="deleteClass($event)">&#xe63a;</span>
+                                                </div>
+                                                <div class="flexClass">
+                                                    <span>放大占位</span>
+                                                    <selnum :data="cls.numValue.fdMax"></selnum>
+                                                    <span class="-i delSpan" id="fg" title="清除放大占位属性"
+                                                          @click="deleteClass($event)">&#xe63a;</span>
+                                                </div>
+                                                <div class="flexClass">
+                                                    <span>缩小占位</span>
+                                                    <selnum :data="cls.numValue.fdMin"></selnum>
+                                                    <span class="-i delSpan" id="fsh" title="清除缩小占位属性"
+                                                          @click="deleteClass($event)">&#xe63a;</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-show="clsPlayShow==1">
+                                        <div class="classDir" v-show="clsPlayShow==1">
+                                            <button class="directory" @click="directory2Click($event)">目录</button>
+                                            <ul class="lis">
+                                                <li><a href="#wah">宽高</a></li>
+                                                <li><a href="#text">文本</a></li>
+                                                <li><a href="#outline">轮廓</a></li>
+                                                <li><a href="#shadow">阴影</a></li>
+                                                <li><a href="#transition">过渡</a></li>
+                                                <li><a href="#overflow">溢出</a></li>
+                                                <li><a href="#background">背景</a></li>
+                                                <li><a href="#conversion">2D或3D转换</a></li>
+                                            </ul>
+                                        </div>
+                                        <div id="wah" class="classClsDiv">
+                                            <span>宽高</span>
+                                            <div class="wahClass">
+                                                <span>最大宽</span>
+                                                <selnum :data="cls.numValue.awd"></selnum>
+                                                <span>单位</span>
+                                                <select name="awd" class="selectClass" v-model="cls.numValue.awd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="aw" title="清除最大宽属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="wahClass">
+                                                <span>最小宽</span>
+                                                <selnum :data="cls.numValue.iwd"></selnum>
+                                                <span>单位</span>
+                                                <select name="iwd" class="selectClass" v-model="cls.numValue.iwd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="iw" title="清除最小宽属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="wahClass">
+                                                <span>最大高</span>
+                                                <selnum :data="cls.numValue.ahd"></selnum>
+                                                <span>单位</span>
+                                                <select name="ahd" class="selectClass" v-model="cls.numValue.ahd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="ah" title="清除最大高属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="wahClass">
+                                                <span>最小高</span>
+                                                <selnum :data="cls.numValue.ihd"></selnum>
+                                                <span>单位</span>
+                                                <select name="ihd" class="selectClass" v-model="cls.numValue.ihd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="ih" title="清除最小高属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                        </div>
+                                        <div id="text" class="classClsDiv">
+                                            <span>文本</span>
+                                            <div class="textClass">
+                                                <span>行高</span>
+                                                <selnum :data="cls.numValue.lhd"></selnum>
+                                                <span class="-i delSpan" id="lh" title="清除行高属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="textClass">
+                                                <span>单位</span>
+                                                <select name="lhd" class="selectClass1" v-model="cls.numValue.lhd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="textClass">
+                                                <span>字间距</span>
+                                                <selnum :data="cls.numValue.lsd"></selnum>
+                                                <span class="-i delSpan" id="ls" title="清除字间距属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="textClass">
+                                                <span>单位</span>
+                                                <select name="lsd" class="selectClass1" v-model="cls.numValue.lsd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="textClass">
+                                                <span>缩进文本</span>
+                                                <selnum :data="cls.numValue.tid"></selnum>
+                                                <span class="-i delSpan" id="ti" title="清除缩进文本属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="textClass">
+                                                <span>单位</span>
+                                                <select name="tid" class="selectClass1" v-model="cls.numValue.tid.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="textClass">
+                                                <span>字符转换</span>
+                                                <select name="tt" class="selectClass1" v-model="cls.numValue.ttd"
+                                                        @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.textTrans" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="textClass">
+                                                <span>文本装饰</span>
+                                                <select name="tl" class="selectClass1" v-model="cls.numValue.tld"
+                                                        @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.textDec" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="textClass">
+                                                <span>绝对居中</span>
+                                                <btn :data="cls.numValue.cc"></btn>
+                                            </div>
+                                            <div class="textClass">
+                                                <span>溢出省略号</span>
+                                                <btn :data="cls.numValue.o"></btn>
+                                            </div>
+                                        </div>
+                                        <div id="outline" class="classClsDiv">
+                                            <span>轮廓</span>
+                                            <div class="outlineDiv">
+                                                <span>宽度</span>
+                                                <selnum :data="cls.numValue.owd"></selnum>
+                                                <span class="outlineSpanCls">单位</span>
+                                                <select name="owd" class="selectClass" v-model="cls.numValue.owd.unit"
+                                                        @change="unitChange($event)">
+                                                    <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="-i delSpan" id="ow" title="清除轮廓宽度属性"
+                                                      @click="deleteClass($event)">&#xe63a;</span>
+                                            </div>
+                                            <div class="outlineDiv">
+                                                <span>样式</span>
+                                                <select name="os" class="selectClass1" v-model="cls.numValue.osd"
+                                                        @change="keyChange($event)">
+                                                    <option v-for="item in cls.numValue.borSty" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                                <span class="outlineSpanCls">颜色透明</span>
+                                                <btn :data="cls.numValue.oct"></btn>
+                                            </div>
+                                            <div class="outlineDiv">
+                                                <span class="outlineSpanCls">颜色</span>
+                                                <input type="color" name="oc" class="inputCls" v-model="cls.numValue.oc"
+                                                       @change="cChange($event)">
+                                                <input type="text" width="25%" name="oc" class="inputCls1"
+                                                       v-model="cls.numValue.oc"
+                                                       @blur="cChange($event)" @keydown="colorChange($event)"
+                                                       onkeyup="value=value.replace(/[^\w#]|_/ig,'')">
+                                            </div>
+                                        </div>
+                                        <div id="shadow" class="classClsDiv">
+                                            <form name="shadow">
+                                                <span>阴影</span>
+                                                <div class="shadowClass">
+                                                    <span>作用域</span>
+                                                    <select name="choose" class="selectClass1"
+                                                            v-model="cls.numValue.boxTextS">
+                                                        <option v-for="item in cls.numValue.boxTS" :value=item.v>
+                                                            {{item.n}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="shadowClass">
+                                                    <span>水平偏移</span>
+                                                    <selnum :data="cls.numValue.shaXd"></selnum>
+                                                    <span class="shadowSpanCls">单位</span>
+                                                    <select name="shadow-unit" class="selectClass"
+                                                            v-model="cls.numValue.shaXd.unit">
+                                                        <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                            {{item.n}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="shadowClass">
+                                                    <span>垂直偏移</span>
+                                                    <selnum :data="cls.numValue.shaYd"></selnum>
+                                                    <span class="shadowSpanCls">单位</span>
+                                                    <select name="shadow-unit" class="selectClass"
+                                                            v-model="cls.numValue.shaYd.unit">
+                                                        <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                            {{item.n}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="shadowClass">
+                                                    <span>模糊距离</span>
+                                                    <selnum :data="cls.numValue.blur"></selnum>
+                                                    <span class="shadowSpanCls">单位</span>
+                                                    <select name="shadow-unit" class="selectClass"
+                                                            v-model="cls.numValue.blur.unit">
+                                                        <option v-for="item in cls.numValue.opUnit" :value=item.v>
+                                                            {{item.n}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="shadowClass">
+                                                    <span>颜色</span>
+                                                    <input type="color" name="shadow-color" class="inputCls shadowCls"
+                                                           v-model="cls.numValue.tsc">
+                                                    <input type="text" name="shadow-color" class="inputCls1 shadowCls"
+                                                           v-model="cls.numValue.tsc"
+                                                           onkeyup="value=value.replace(/[^\w#]|_/ig,'')">
+                                                </div>
+                                                <button style="background:blue;margin-left:50%"
+                                                        @click="tsBtnClick($event)" type="button">应用
+                                                </button>
+                                                <button type="button" name="ts" @click="deleteClass($event)"
+                                                        style="background:blue">删除
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div id="transition" class="classClsDiv">
+                                            <form name="transition">
+                                                <span>过渡</span>
+                                                <div class="transitionClass">
+                                                    <span>过渡属性</span>
+                                                    <select name="tp" class="selectClass1" v-model="cls.numValue.tpd"
+                                                            @change="keyChange($event)">
+                                                        <option v-for="item in cls.numValue.aniDire" :value=item.v>
+                                                            {{item.n}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="transitionClass">
+                                                    <span>过渡时间</span>
+                                                    <selnum :data="cls.numValue.tud"></selnum>
+                                                </div>
+                                                <div class="transitionClass">
+                                                    <span>单位</span>
+                                                    <select name="tud" class="selectClass1"
+                                                            v-model="cls.numValue.tud.unit"
+                                                            @change="unitChange($event)">
+                                                        <option v-for="item in cls.numValue.tranTimeUnit" :value=item.v>
+                                                            {{item.n}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="transitionClass">
+                                                    <span>速度曲线</span>
+                                                    <select name="ttf" class="selectClass1" v-model="cls.numValue.ttfd"
+                                                            @change="keyChange($event)">
+                                                        <option v-for="item in cls.numValue.timingFunction"
+                                                                :value=item.v>{{item.n}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="transitionClass">
+                                                    <span>延迟时间</span>
+                                                    <selnum :data="cls.numValue.trdd"></selnum>
+                                                </div>
+                                                <div class="transitionClass">
+                                                    <span>单位</span>
+                                                    <select name="trdd" class="selectClass1"
+                                                            v-model="cls.numValue.trdd.unit"
+                                                            @change="unitChange($event)">
+                                                        <option v-for="item in cls.numValue.tranTimeUnit" :value=item.v>
+                                                            {{item.n}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <!--<button style="background:blue;margin-left:70%">应用</button>-->
+                                            </form>
+                                        </div>
+                                        <div id="overflow" class="classClsDiv">
+                                            <span>溢出</span>
+                                            <div class="overflowClass">
+                                                <span>处理方式</span>
+                                                <select name="of" class="selectClass1" v-model="cls.numValue.ofd"
+                                                        @change="ofChange($event)" id="ofSel">
+                                                    <option v-for="item in cls.numValue.overflowHanding" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="overflowClass">
+                                                <span>处理方向</span>
+                                                <select name="overflow-direction" class="selectClass1"
+                                                        v-model="cls.numValue.selOverflow" @change="ofChange1($event)">
+                                                    <option v-for="item in cls.numValue.overflow" :value=item.v>
+                                                        {{item.n}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div id="background" class="classClsDiv">
+                                            <span>背景</span>
+                                            <div class="backgroundDivCls">
+                                                <span class="backgroundSpan">背景图片</span>
+                                                <button @click="bgiClilck($event)">添加图片</button>
+                                            </div>
+                                            <div class="addBgi" v-show="cls.bgiIsShow">
+                                                <div class="addBgiDiv">
+                                                    <span class="addBgiSpan">请选择图片：</span>
+                                                    <input type="file" class="backgroundImg" onchange="addBgiImg(this)"
+                                                           name="bgi">
+                                                </div>
+                                                <div class="bgiBtn">
+                                                    <button @click="canBgi($event)">取消</button>
+                                                    <button @click="sureBgi($event)">确定</button>
+                                                </div>
+                                            </div>
+                                            <div class="backgroundDivCls">
+                                                <span class="backgroundSpan">图片尺寸</span>
+                                                <span class="minSpan">宽</span>
+                                                <selnum :data="cls.numValue.bawd"></selnum>
+                                            </div>
+                                            <div class="marginDiv">
+                                                <span class="minSpan1">高</span>
+                                                <selnum :data="cls.numValue.bahd"></selnum>
+                                            </div>
+                                            <div class="backgroundClass">
+                                                <span>背景区域</span>
+                                                <radio :data="cls.numValue.blb"></radio>
+                                                <radio :data="cls.numValue.blp"></radio>
+                                                <radio :data="cls.numValue.blc"></radio>
+                                            </div>
+                                            <div class="backgroundClass">
+                                                <span>背景重复</span>
+                                                <radio :data="cls.numValue.brerp"></radio>
+                                                <radio :data="cls.numValue.brerx"></radio>
+                                                <radio :data="cls.numValue.brery"></radio>
+                                            </div>
+                                            <div class="backgroundDivCls">
+                                                <span class="backgroundSpan">图片定位</span>
+                                                <span class="minSpan">X</span>
+                                                <selnum :data="cls.numValue.imgXd"></selnum>
+                                            </div>
+                                            <div class="marginDiv">
+                                                <span class="minSpan1">Y</span>
+                                                <selnum :data="cls.numValue.imgYd"></selnum>
+                                            </div>
+                                            <div class="backgroundClass">
+                                                <span>图片滚动</span>
+                                                <radio :data="cls.numValue.bas"></radio>
+                                                <radio :data="cls.numValue.baf"></radio>
+                                            </div>
+                                        </div>
+                                        <div id="conversion" class="classClsDiv">
+                                            <div class="conversionCls">
+                                                <span>2D或3D转换</span>
+                                                <button class="conversionBtnCls directory"
+                                                        @click="directory3Click($event)">2D
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <div class="conversionOne">
+                                                    <div class="conversionClass">
+                                                        <span>移动</span>
+                                                        <span>X</span>
+                                                        <input type="text" name="translateX" class="inputClass"
+                                                               v-model="cls.numValue.transXd">
+                                                        <span>Y</span>
+                                                        <input type="text" name="translateY" class="inputClass"
+                                                               v-model="cls.numValue.transYd">
+                                                    </div>
+                                                    <div class="conversionClass">
+                                                        <span>缩放</span>
+                                                        <span>X</span>
+                                                        <input type="text" name="scaleX" class="inputClass"
+                                                               v-model="cls.numValue.scaXd">
+                                                        <span>Y</span>
+                                                        <input type="text" name="scaleY" class="inputClass"
+                                                               v-model="cls.numValue.scaYd">
+                                                    </div>
+                                                    <div class="conversionClass">
+                                                        <span>旋转</span>
+                                                        <span>X</span>
+                                                        <input type="text" name="rotateX" class="inputClass"
+                                                               v-model="cls.numValue.rotXd">
+                                                        <span>Y</span>
+                                                        <input type="text" name="rotateY" class="inputClass"
+                                                               v-model="cls.numValue.rotYd">
+                                                    </div>
+                                                    <div class="conversionClass">
+                                                        <span>倾斜</span>
+                                                        <span>X</span>
+                                                        <input type="text" name="skewX" class="inputClass"
+                                                               v-model="cls.numValue.skewXd">
+                                                        <span>Y</span>
+                                                        <input type="text" name="skewY" class="inputClass"
+                                                               v-model="cls.numValue.skewYd">
+                                                    </div>
+
+                                                </div>
+                                                <div class="conversionTwo">
+                                                    <div class="conversionClass">
+                                                        <span>移动</span>
+                                                        <span>X</span>
+                                                        <input type="text" name="translateX" class="conversionInputCls"
+                                                               v-model="cls.numValue.transThreeXd">
+                                                        <span>Y</span>
+                                                        <input type="text" name="translateY" class="conversionInputCls"
+                                                               v-model="cls.numValue.transThreeYd">
+                                                        <span>Z</span>
+                                                        <input type="text" name="translateZ" class="conversionInputCls"
+                                                               v-model="cls.numValue.transThreeZd">
+                                                    </div>
+                                                    <div class="conversionClass">
+                                                        <span>缩放</span>
+                                                        <span>X</span>
+                                                        <input type="text" name="scaleX" class="conversionInputCls"
+                                                               v-model="cls.numValue.scaThreeXd">
+                                                        <span>Y</span>
+                                                        <input type="text" name="scaleY" class="conversionInputCls"
+                                                               v-model="cls.numValue.scaThreeYd">
+                                                        <span>Z</span>
+                                                        <input type="text" name="scaleZ" class="conversionInputCls"
+                                                               v-model="cls.numValue.scaThreeZd">
+                                                    </div>
+                                                    <div class="conversionClass">
+                                                        <span>旋转</span>
+                                                        <span>X</span>
+                                                        <input type="text" name="rotateX" class="conversionInputCls"
+                                                               v-model="cls.numValue.rotThreeXd">
+                                                        <span>Y</span>
+                                                        <input type="text" name="rotateY" class="conversionInputCls"
+                                                               v-model="cls.numValue.rotThreeYd">
+                                                        <span>Z</span>
+                                                        <input type="text" name="rotateZ" class="conversionInputCls"
+                                                               v-model="cls.numValue.rotThreeZd">
+                                                    </div>
+                                                    <div class="conversionClass">
+                                                        <span>倾斜</span>
+                                                        <span>X</span>
+                                                        <input type="text" name="skewX" class="conversionInputCls"
+                                                               v-model="cls.numValue.skewThreeXd">
+                                                        <span>Y</span>
+                                                        <input type="text" name="skewY" class="conversionInputCls"
+                                                               v-model="cls.numValue.skewThreeYd">
+                                                        <span>Z</span>
+                                                        <input type="text" name="skewZ" class="conversionInputCls"
+                                                               v-model="cls.numValue.skewThreeZd">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-show="clsPlayShow==2">扩展</div>
+                                    <div v-show="clsPlayShow==3" style="overflow: hidden">
+                                        <span style="display: block" class="animate">Animate.css</span>
+                                        <div class="animateDiv">
+                                            <select name="animate" class="animateSel" v-model="aniSel_data"
+                                                    @change="animateSel($event)">
+                                                <option v-for="item in ani_data" :value=item.v>{{item.n}}</option>
+                                            </select>
+                                            <button class="animateBtn" @click="animateBtn($event)">应用</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--数据操作区-->
+                            <div class="dataCls" v-show="playShow==1">
+                                <div class="classNav">
+                                    <span class="classTitle dataCurrent" @click="dataBasicClick($event)">基础数据</span>
+                                    <span class="classTitle" @click="dataHandleClick($event)">事件</span>
+                                </div>
+                                <div class="comDataShow" v-show="baseDataShow==0">
+                                    <div>
+                                        <span>数据展示</span>
+                                        <span class="span-btn">数据树>>></span>
+                                        <!--<txtarea :data="b_data.comValue"></txtarea>-->
+                                        <textarea name="" id="" cols="30" rows="10"
+                                                  v-model="b_data.comValue1"></textarea>
+                                        <button :data="b_data.comValue" @click="applyData($event)">应用</button>
+                                    </div>
+                                    <div class="dataClass">
+                                        <div>
+                                            <button @click="addCurClick($event)">添加段</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-show="baseDataShow==1" class="interation">
+                                    <div v-show="!event.showTextarea">
+                                        <span>事件类型</span>
+                                        <span class="iconfont increase" @click="addTypeBtn()">&#xe64b;</span>
+                                        <select v-show="event.modeIsShow" v-model="event.newEvent" style="width: 30%"
+                                                >
+                                            <option v-for="item in event.newEventMode" :value=item>{{item}}</option>
+                                        </select>
+                                        <button v-show="event.modeIsShow" @click="confirmAddType()">确定</button>
+                                    </div>
+                                    <div v-show="!event.showTextarea">
+                                        <div v-for="(item, index) in event.eventData" class="ruler">
+                                            <span class="triggerMode" :value=item.k
+                                                  @click="showEventList($event, index)">{{item.k}}</span>
+                                            <span class="iconfont" @click="deleteEventType(index)">&#xe63a;</span>
+                                        </div>
+                                    </div>
+                                    <div v-show="!event.showTextarea">
+                                        <span>事件列表</span>
+                                        <span class="iconfont increase" @click="addEventFn($event)">&#xe64b;</span>
+                                    </div>
+                                    <div v-show="!event.showTextarea">
+                                        <div v-for="(item, index) in event.partEventList" class="ruler">
+                                            <span class="triggerMode" @click="triggerEvent($event, index)">{{item}}</span>
+                                            <span class="iconfont" @click="deleteEventFn(index)">&#xe63a;</span>
+                                        </div>
+                                    </div>
+                                    <div v-show="event.showTextarea">
+                                        <span>事件内容</span>
+                                        <textarea v-model="event.eventD" @input="eventContent($event)"></textarea>
+                                        <button @click="confirmBtn()">确定</button>
+                                    </div>
+                                </div>
+                                <div v-show="baseDataShow==2" class="datatreediv">
+                                    <!--<datatree :data="phoneShow.ds"></datatree>-->
+                                    <!--<datatree v-show="baseDataShow==2"></datatree>-->
+                                    <!--<datatree></datatree>-->
+                                </div>
+                            </div>
+                            <!--交互操作区-->
+                            <div style="overflow-y: auto;height: 90%;" v-show="playShow==2">
+                                <div>
+                                    <span>触发事件</span>
+                                    <i class="-i" style="cursor: default" @click="selectInter()">&#xe64b;</i>
+                                    <select v-model="eventObj.eventMethod" v-show="eventObj.selEventShow">
+                                        <option v-for="item in eventObj.eventNameArr" :value="item.k">{{item.v}}
+                                        </option>
+                                    </select>
+                                    <div>
+                                        <ul>
+                                            <li v-for="(item,index) in eventObj.eventWay" @click="EventMethodDetail(item)" class="EventList">
+                                                <span>{{item}}</span>
+                                                <i @click="deleteEventList($event,item,index)" class="-i deleteEventList" title="删除当前操作事件对象">&#xe63a;</i>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div v-show="eventObj.destination">
+                                    <span>目标对象</span>
+                                    <i class="-i addRen" @click="addRenderObj()" title="点击进入选取目标状态">&#xe666;</i>
+                                    <span class="-i addRen" @click="canceladdRenderObj()" title="点击取消选取状态">&#xe668;</span>
+                                    <div v-for="(item,index) in eventObj.target" class="EventList">
+                                        <span @click="renderDetails(item)">{{item}}</span>
+                                        <i class="-i deleteEventList" @click="deleteRd(item,index)">&#xe63a;</i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span v-for="item in interactiveData.tg">{{item}}</span>
+                                </div>
+                                <div v-show="eventObj.isShow">
+                                    <p>属性改变</p>
+                                    <textarea cols="20" rows="3" v-model="interactiveData.attrs"
+                                              @blur="blurFun()"></textarea>
+                                    <div>
+                                        <div>弹框事件</div>
+                                        <div>
+                                            <select v-model="interactiveData.popEvent" @change="popFun">
+                                                <option value="">请选择事件</option>
+                                                <option value="popToTop(e,item)">在上方弹出(左)</option>
+                                                <option value="popToBottom(e,item)">在下方弹出</option>
+                                                <option value="popToLeft(e,item)">在左边弹出</option>
+                                                <option value="popToRight(e,item)">在右边弹出</option>
+                                                <option value="rightPopToTop(e,item)">在上边弹出(右)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p>样式改变</p>
+                                        <div>
+                                            <label>替换<input type="checkbox" v-model="eventObj.isSplice" @change="isSplice()"></label>
+                                        </div>
+                                        <div>
+                                            <span>去选择样式-></span>
+                                            <i class="-i" style="cursor: default" @click="changeCheckCss()"
+                                               title="点击去添加修改样式">&#xe6de;</i>
+                                            <input type="number" v-model="eventObj.unitNum" style="width: 10%;">
+                                        </div>
+                                    </div>
+                                    <!--<clslist :data="eventObj.clsList"></clslist>-->
+                                </div>
+                            </div>
+                            <!--布局操作区-->
+                            <div class="handleCls" v-show="playShow==3">
+                                <span>tp:</span>
+                                <select v-model="layoutTp" @change="layoutFun($event)">
+                                    <option value="df">默认</option>
+                                    <option value="ll">线性布局</option>
+                                    <option value="gl">网格布局</option>
+                                    <option value="tr">目录树布局</option>
+                                    <!--<option value="opl">opl</option>-->
+                                </select>
+                                <atr :data="layoutIlm"></atr>
+                            </div>
+                        </div>
+                    </div>
+                    <!--页面信息区-->
+                    <div class="pageMessage" v-show="rtShow==1">
+                        <span>页面信息</span>
+                        <textarea :data="messageData" rows="10" cols="35">{{messageData}}</textarea>
+                    </div>
+                    <!--规则展示区-->
+                    <div class="page_data" v-show="rtShow==2">
+                        <div class="classClsDiv renrule">
+                            <p class="ruler-ti">渲染规则列表</p>
+                            <div class="ruler-title">
+                                <span>选择渲染规则</span>
+                                <div>
+                                    <i class="iconfont" @click="renRuleState($event)" v-html="getRenState"></i>
+                                    <i class="iconfont" @click="renRuleAdd($event)">&#xe64b;</i>
+                                </div>
+                            </div>
+                            <div v-for="(item, index) in pageRenData.rls" class="ruler">
+                                <input type="radio" v-model="pageRenData.data.rl" :value="index" name="index"
+                                       class="backgroundRadioCls">
+                                <span @click="renRuleDetails($event, index)">渲染规则 {{index}} 类型 {{item.tp}}</span>
+                                <span class="iconfont" @click="renRuleDelete(index)">&#xe63a;</span>
+                            </div>
+                        </div>
+                        <div v-show="pageRenData.isShowEdit && pageRenData.choiceOrUpdate">
+                            <span>编辑渲染规则</span>
+                            <!-- 规则类型 -->
+                            <div>
+                                <span>规则类型</span>
+                                <select name="" v-model="pageRenData.tempData.tp">
+                                    <option value="order1">order1</option>
+                                    <option value="order2">order2</option>
+                                    <option value="ifChoice">ifChoice</option>
+                                    <option value="switchChoice">switchChoice</option>
+                                </select>
+                            </div>
+                            <!-- 编辑框 -->
+                            <div>
+                                <div v-show="pageRenData.tempData.tp === 'order1' || pageRenData.tempData.tp === 'order2'">
+                                    <span>范围</span>
+                                    <div>
+                                        <span>索引数组</span> <input type="text" v-model="pageRenData.tempData.scopeArr">
+                                    </div>
+                                    <div>
+                                        <span>起始索引</span> <input v-model="pageRenData.tempData.scopeStart" type="text">
+                                    </div>
+                                    <div>
+                                        <span>结束索引</span> <input v-model="pageRenData.tempData.scopeEnd" type="text">
+                                    </div>
+
+                                    <div>
+                                        <span>是否循环</span> <input type="text" v-model="pageRenData.tempData.isLoop">
+                                    </div>
+                                    <div>
+                                        <span>是否往复</span> <input type="text"
+                                                                 v-model="pageRenData.tempData.isReciprocate">
+                                    </div>
+                                </div>
+                                <div v-show="pageRenData.tempData.tp === 'ifChoice' || pageRenData.tempData.tp === 'switchChoice'">
+                                    <span>条件表达式</span> <input type="text" v-model="pageRenData.tempData.other">
+                                </div>
+
+                                <div v-show="pageRenData.tempData.tp === 'ifChoice'">
+                                    <div>
+                                        <span>为真时渲染索引</span> <input type="text"
+                                                                    v-model="pageRenData.tempData.resultTrue">
+                                    </div>
+                                    <div>
+                                        <span>为假时渲染索引</span> <input type="text"
+                                                                    v-model="pageRenData.tempData.resultFalse">
+                                    </div>
+                                </div>
+                                <!-- switch条件规则 表达式值 规则索引 对应关系 -->
+                                <div v-show="pageRenData.tempData.tp === 'switchChoice'">
+                                    <p>switch对应列表</p>
+                                    <div>
+                                        <span>值数组</span> <input type="text" v-model="pageRenData.tempData.valueString">
+                                    </div>
+                                    <div>
+                                        <span>索引数组</span> <input type="text" v-model="pageRenData.tempData.indexString">
+                                    </div>
+                                </div>
+                                <div>
+                                    <button @click="renRuleSave($event)">保存</button>
+                                    <button @click="renRuleCancel()">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--约束展示区-->
+                    <div class="" v-show="rtShow==3">
+                        <p class="ruler-ti">约束规则管理</p>
+                        <div class="ruler-title">
+                            <span>选择约束规则</span>
+                            <div>
+                                <i class="iconfont" @click="rulerState($event)">&#xe66a;</i>
+                                <i class="iconfont" @click="addCon()">&#xe64b;</i>
+                            </div>
+                        </div>
+                        <ul>
+                            <li class="ruler" v-for="(item,index) in con_rul.con_obj" @click="selConType($event,index)">
+                                <span>{{index}}</span>
+                                <span class="iconfont" @click="deleteCon(index)">&#xe63a;</span>
+                            </li>
+                        </ul>
+                        <div v-show="con_rul.isShowModifyPop">
+                            <div>
+                                <input type="text" v-model="con_rul.conName" @change="changeCon()">
+                            </div>
+                            <div>
+                                <select v-model="con_rul.fnName">
+                                    <option v-for="item in con_rul.fnArr" :value="item">{{item}}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <textarea cols="30" rows="10" v-model="con_rul.modifyState"></textarea>
+                            </div>
+                            <div>
+                                <button @click="cancelCon()">取消</button>
+                                <button @click="sureCon()">确定</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tree-show">
+                <div class="model-title">
+                    <span id="css" class="model-t2" @click="cssTreeClick($event)">css树</span>
+                    <span id="page" class="model-t2 model-show2" @click="pageTreeClick($event)">页面树</span>
+                </div>
+                <div class="model-con1">
+                    <div class="cssTree" v-show="treeShow==1">
+                        <csstree :data="cssTree"></csstree>
+                    </div>
+                    <div v-show="treeShow==0" id="pageShow">
+                        <pagetree :state="pState" :data="pageTree.vmTree"></pagetree>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/utils/jquery-1.11.3.js"></script>
+<script src="../js/utils/layer.js"></script>
+<script src="../js/utils/city.js"></script>
+<script src="https://cdn.bootcss.com/bluebird/3.5.1/bluebird.min.js"></script>
+<script src="../js/utils/ajax.js"></script>
+<script src="../js/utils/bindEvent.js"></script>
+<script src="../js/utils/format.js"></script>
+<script src="../js/utils/CloneUtil.js"></script>
+<script src="../js/utils/ajax.js"></script>
+<script src="../js/cssClass/attributeParse.js"></script>
+<script src="../js/utils/analyzeExpression.js"></script>
+<script src="../js/utils/dialogUti.js"></script>
+<script src="../js/comData/getCssData.js"></script>
+<script src="../js/getLayoutData.js"></script>
+<script src="../js/createLayoutDom.js"></script>
+<script src="../js/comAndLayout/createDom.js"></script>
+<script src="../js/Fun.js"></script>
+<script src="../js/InitWeb.js"></script>
+<script src="../js/phoneModel/cssDynaCache.js"></script>
+<script src="../js/phoneModel/LookShow/EventParse.js"></script>
+<script src="../js/phoneModel/DataTreeParse.js"></script>
+<script src="../js/phoneModel/LookShow/cssDomBind.js"></script>
+<script src="../js/phoneModel/PlayShow/cssDomBind.js"></script>
+<script src="../js/phoneModel/dataRenderMatch.js"></script>
+<script src="../js/phoneModel/CssParse.js"></script>
+<script src="../js/phoneModel/PlayShow/dsDeal.js"></script>
+<!--数据引入-->
+<script src="../js/phoneModel/PlayShow/phoneModelVariable.js"></script>
+<script src="../js/phoneModel/LookShow/lookVariable.js"></script>
+<script src="../js/phoneModel/showVariable.js"></script>
+<script src="../js/selShowPhone/selShowPhoneVariable.js"></script>
+<script src="../js/projectID/projectIDVariable.js"></script>
+<script src="../js/vue.js"></script>
+
+<script src="../js/showTree/modifyContAndComp.js"></script>
+
+<!--显示区放大或缩小-->
+<script src="../js/bigAndSmall/bigAndSmall.js"></script>
+<script src="../js/bigAndSmall/bigAndSmallVariable.js"></script>
+<script src="../js/bigAndSmall/bigAndSmallVue.js"></script>
+<!--基本组件和布局-->
+<script src="../js/comAndLayout/comAndLayoutAjax.js"></script>
+<script src="../js/comAndLayout/CreateView.js"></script>
+<script src="../js/comAndLayout/getCssData.js"></script>
+<script src="../js/comAndLayout/getData.js"></script>
+<script src="../js/comAndLayout/comAndLayoutVariable.js"></script>
+<script src="../js/comAndLayout/comAndLayout.js"></script>
+<script src="../js/comAndLayout/comAndLayoutComponent.js"></script>
+<script src="../js/comAndLayout/comAndLayoutVue.js"></script>
+<!--属性和数据区-->
+<script src="../js/cssClass/clsNameJoin.js"></script>
+<script src="../js/cssClass/cssClassVariable.js"></script>
+<script src="../js/cssClass/cssClass.js"></script>
+<script src="../js/cssClass/cssComponent.js"></script>
+<script src="../js/cssClass/cssClassVue.js"></script>
+<!--展示区域-->
+<script src="../js/phoneModel/PlayShow/phoneComponent.js"></script>
+<script src="../js/phoneModel/LookShow/lookComponent.js"></script>
+<script src="../js/phoneModel/PlayShow/phoneModel.js"></script>
+<script src="../js/phoneModel/phoneVue.js"></script>
+<!--组件tree和页面tree展示区-->
+<script src="../js/showTree/showTree.js"></script>
+<script src="../js/showTree/showTreeComponent.js"></script>
+<script src="../js/showTree/showTreeVue.js"></script>
+<!--项目名称ID展示区-->
+<script src="../js/projectID/projectID.js"></script>
+<script src="../js/projectID/projectIDComponent.js"></script>
+<script src="../js/projectID/projectIDVue.js"></script>
+<!--选择展示区模型-->
+<script src="../js/selShowPhone/selShowPhone.js"></script>
+<script src="../js/selShowPhone/selShowPhoneVue.js"></script>
+
+<script src="../js/phoneModel/initView.js"></script>
+<!--初始化平台-->
+<script src="../js/initView.js"></script>
+
+<script>
+    initView();
+    var phoneModel = document.getElementById("show-screen");
+    var showArea = document.querySelector("#show-screen>div:nth-child(2)");
+    showArea.addEventListener("mousedown", function (e) {
+        if (e.button === 2) {
+            e.target.oncontextmenu = function () {
+                return false
+            }
+        }
+    });
+    phoneModel.addEventListener("keydown", function (e) {
+        //可以判断是不是mac，如果是mac,ctrl变为花键
+        //event.preventDefault() 方法阻止元素发生默认的行为。
+        var data = phoneShow.play_data;
+        if (e.keyCode === 83) {
+            e.preventDefault();
+            if (phoneShow.id && phoneShow.id !== "") {
+                var D = dataTreeParse.weedPageData(phoneShow);
+                localStorage.setItem(phoneShow.id, JSON.stringify(D));
+            }
+        } else if (e.keyCode === 67) {
+            e.preventDefault();
+            console.log("ctrl+c");
+            if (data.d) {
+                deepCopyCom(data)
+            } else {
+                deepCopyCon(data);
+            }
+        } else if (e.keyCode === 86) {
+            e.preventDefault();
+            console.log("ctrl+v");
+            if (!data.d) {
+                pasteCurParagToLast(data, phoneShow.play_index);
+            }
+        } else if (e.keyCode === 88) {
+            e.preventDefault();
+
+        }
+    });
+    window.addEventListener("keydown",function (e) {
+       if(e.keyCode === 27 && document.getElementById("shadeShadow")){
+           e.preventDefault();
+           idList.addData = "";
+           idList.popShow = false;
+           document.getElementById('data-handle').removeChild(document.getElementById("shadeShadow"));
+       }
+    });
+    window.onload = function () {
+        var phone = document.getElementById("show-screen");
+        remSetting = new RemSetting(phone);
+    };
+    var pageTree = document.querySelector(".model-con1");
+    pageTree.addEventListener('mousedown', function (e) {
+        if (e.button === 2) {
+            prevent(e.target);
+        }
+    })
+</script>
+</body>
+</html>
