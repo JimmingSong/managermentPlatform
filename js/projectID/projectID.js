@@ -34,7 +34,13 @@ function menu(e, index, item) {
                 name: "删除本地", icon: "", values: [{
                 key: "click", value: function (event) {
                     $.layer.confirm("删除本地页面页面数据将不能被找回,你确定要删除吗?", function () {
-                        deleteOnePageDataTolocal(tar)
+                        deleteOnePageDataTolocal(tar);
+                        for (i of liList) {
+                            i.style.background = "";
+                        }
+                        for (let j of liList) {
+                            j.className = '';
+                        }
                     })
                 }
             }], children: []

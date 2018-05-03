@@ -972,13 +972,13 @@ let classModelVM = new Vue({
                 let clsName;
                 var un = this.cls.numValue[name]["unit"];
                 if(this.cls.numValue[name].value!==0){
-                    var v=this.cls.numValue[name].value;
+                    var v = this.cls.numValue[name].value;
                     if(v.toString().indexOf(".")===-1){
-                        clsName=name.split("d")[0]+"-"+v+"--"+un;
+                        clsName = name.split("d")[0] + "-" + v + "--" + un;
                     }else{
                         var str=v.toString();
                         var arr = str.split(".");
-                        clsName=name.split("d")[0]+"-"+arr[0]+"_"+arr[1]+"--"+un;
+                        clsName = name.split("d")[0] + "-" + arr[0] + "_" + arr[1] + "--" + un;
                     }
                     addCssName(this.clsobj.obj, clsName)
                 }
@@ -994,8 +994,26 @@ let classModelVM = new Vue({
             }else if(name==="m"){
                 classAddToStyle.clsJoin(this.cls.numValue.marginPadding, this.cls.numValue.md.value, this.cls.numValue.md.unit, cssBaseData.clsName[this.cls.numValue.marginPadding], this.clsobj.obj)
             }else if(name==="bw"){
-                var bw=this.cls.numValue.selBord+"w";
-                classAddToStyle.clsJoin(bw, this.cls.numValue.bwd.value, this.cls.numValue.bwd.unit, cssBaseData.clsName[bw], this.clsobj.obj)
+                let bw = this.cls.numValue.selBord + "w";
+                let cls = this.clsobj.obj.cls.split(" ");
+                switch (this.cls.numValue.selBord) {
+                    case "b":
+                        showBorderDetail(this.cls.numValue.selBord, cls);
+                        break;
+                    case "bl":
+                        showBorderDetail(this.cls.numValue.selBord, cls);
+                        break;
+                    case "br":
+                        showBorderDetail(this.cls.numValue.selBord, cls);
+                        break;
+                    case "bb":
+                        showBorderDetail(this.cls.numValue.selBord, cls);
+                        break;
+                    case "bt":
+                        showBorderDetail(this.cls.numValue.selBord, cls);
+                        break
+                }
+                //classAddToStyle.clsJoin(bw, this.cls.numValue.bwd.value, this.cls.numValue.bwd.unit, cssBaseData.clsName[bw], this.clsobj.obj)
             }else if(name==="ff"){
                 clsName = name + "-" + this.cls.numValue[name + "d"];
                 addCssName(this.clsobj.obj, clsName)
@@ -1011,6 +1029,7 @@ let classModelVM = new Vue({
         cChange:function(e){
             //判断输入的字符，截取到6位颜色数字，如果没有6位，则默认补0
             var name=e.target.name;
+            let clsName;
             if (e.target.value.indexOf("#") !== 0) {
                 this.cls.numValue[name] = "#" + e.target.value;
             }
@@ -1026,14 +1045,14 @@ let classModelVM = new Vue({
             //边框颜色
             if(name==="bdc"){
                 if(this.cls.numValue.selBord==="b"){
-                    var clsName=this.cls.numValue.selBord+"dc-"+this.cls.numValue[name].toString().substr(1).toUpperCase();
+                    clsName = this.cls.numValue.selBord + "dc-" + this.cls.numValue[name].toString().substr(1).toUpperCase();
                 }else{
-                    var clsName=this.cls.numValue.selBord+"c-"+this.cls.numValue[name].toString().substr(1).toUpperCase();
+                    clsName = this.cls.numValue.selBord + "c-" + this.cls.numValue[name].toString().substr(1).toUpperCase();
                 }
                 addCssName(this.clsobj.obj, clsName)
             }else{
                 console.log(e.target.name);
-                var clsName=name+"-"+this.cls.numValue[name].toString().substr(1).toUpperCase();
+                clsName = name + "-" + this.cls.numValue[name].toString().substr(1).toUpperCase();
                 addCssName(this.clsobj.obj, clsName)
             }
 

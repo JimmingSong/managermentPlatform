@@ -296,7 +296,7 @@ var classAndData = {
                 "n":"下边框",
                 "v":"bb"
             }],
-            bsd: "da",
+            bsd: "s",
             borSty:[{
                 "n":"实线",
                 "v":"s"

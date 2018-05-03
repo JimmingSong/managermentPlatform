@@ -224,3 +224,27 @@ function showClsTreeView(h,data){
             }
         }, li_views);
 }
+
+function showBorderDetail(direction, cls) {
+    for (var item of cls) {
+        let clsHead = item.split("-")[0];
+        let value = item.split("-")[1];
+        switch (clsHead) {
+            case direction + "w":
+                classAndData.cls.numValue.bwd.value = item.split("--")[0].split("-")[1];
+                classAndData.cls.numValue.bwd.unit = item.split("--")[1];
+                break;
+            case direction + "c":
+                classAndData.cls.numValue.bdc = "#" + value;
+                break;
+            case direction + "s":
+                classAndData.cls.numValue.bsd = value;
+                break;
+            default:
+                classAndData.cls.numValue.bwd.value = 0;
+                classAndData.cls.numValue.bwd.unit = "r";
+                classAndData.cls.numValue.bdc = "#000000";
+                classAndData.cls.numValue.bsd = "s";
+        }
+    }
+}
